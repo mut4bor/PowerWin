@@ -1,0 +1,16 @@
+E:\Sites\PowerWin\PowerWin\PowerWin\bin\Debug\net8.0-windows\PowerWin.exe
+E:\Sites\PowerWin\PowerWin\PowerWin\bin\Debug\net8.0-windows\PowerWin.deps.json
+E:\Sites\PowerWin\PowerWin\PowerWin\bin\Debug\net8.0-windows\PowerWin.runtimeconfig.json
+E:\Sites\PowerWin\PowerWin\PowerWin\bin\Debug\net8.0-windows\PowerWin.dll
+E:\Sites\PowerWin\PowerWin\PowerWin\bin\Debug\net8.0-windows\PowerWin.pdb
+E:\Sites\PowerWin\PowerWin\PowerWin\obj\Debug\net8.0-windows\PowerWin.csproj.GenerateResource.cache
+E:\Sites\PowerWin\PowerWin\PowerWin\obj\Debug\net8.0-windows\PowerWin.GeneratedMSBuildEditorConfig.editorconfig
+E:\Sites\PowerWin\PowerWin\PowerWin\obj\Debug\net8.0-windows\PowerWin.AssemblyInfoInputs.cache
+E:\Sites\PowerWin\PowerWin\PowerWin\obj\Debug\net8.0-windows\PowerWin.AssemblyInfo.cs
+E:\Sites\PowerWin\PowerWin\PowerWin\obj\Debug\net8.0-windows\PowerWin.csproj.CoreCompileInputs.cache
+E:\Sites\PowerWin\PowerWin\PowerWin\obj\Debug\net8.0-windows\PowerWin.dll
+E:\Sites\PowerWin\PowerWin\PowerWin\obj\Debug\net8.0-windows\refint\PowerWin.dll
+E:\Sites\PowerWin\PowerWin\PowerWin\obj\Debug\net8.0-windows\PowerWin.pdb
+E:\Sites\PowerWin\PowerWin\PowerWin\obj\Debug\net8.0-windows\PowerWin.genruntimeconfig.cache
+E:\Sites\PowerWin\PowerWin\PowerWin\obj\Debug\net8.0-windows\ref\PowerWin.dll
+E:\Sites\PowerWin\PowerWin\PowerWin\obj\Debug\net8.0-windows\PowerWin.Settings.resources
