@@ -13,4 +13,8 @@
     <SourceRoot Include="C:\Users\mut4bor\.nuget\packages\" />
     <SourceRoot Include="C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages\" />
   </ItemGroup>
+  <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Import Project="$(NuGetPackageRoot)toolbelt.blazor.getproperty.script\1.2.0\buildTransitive\Toolbelt.Blazor.GetProperty.Script.props" Condition="Exists('$(NuGetPackageRoot)toolbelt.blazor.getproperty.script\1.2.0\buildTransitive\Toolbelt.Blazor.GetProperty.Script.props')" />
+    <Import Project="$(NuGetPackageRoot)toolbelt.blazor.hotkeys2\6.0.0\buildTransitive\Toolbelt.Blazor.HotKeys2.props" Condition="Exists('$(NuGetPackageRoot)toolbelt.blazor.hotkeys2\6.0.0\buildTransitive\Toolbelt.Blazor.HotKeys2.props')" />
+  </ImportGroup>
 </Project>

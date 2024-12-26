@@ -1,4 +1,5 @@
-﻿namespace PowerWin
+﻿
+namespace PowerWin
 {
     partial class Settings
     {
@@ -28,7 +29,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            resolutionCombobox = new ComboBox();
             tabControl = new TabControl();
             generalSettingsTab = new TabPage();
             generalSettingsRecommendedButton = new Button();
@@ -36,21 +36,15 @@
             disableMouseAccelCheckbox = new CheckBox();
             generalSettingsApplyButton = new Button();
             resolutionHotkeyTab = new TabPage();
+            ResolutionHotkeysPanel = new FlowLayoutPanel();
+            bottomButtonsPanel = new FlowLayoutPanel();
+            addHotkeyResolutionForm = new Button();
             resolutionHotkeyApplyButton = new Button();
-            frequencyCombobox = new ComboBox();
             tabControl.SuspendLayout();
             generalSettingsTab.SuspendLayout();
             resolutionHotkeyTab.SuspendLayout();
+            bottomButtonsPanel.SuspendLayout();
             SuspendLayout();
-            // 
-            // resolutionCombobox
-            // 
-            resolutionCombobox.FormattingEnabled = true;
-            resolutionCombobox.Location = new Point(6, 6);
-            resolutionCombobox.Name = "resolutionCombobox";
-            resolutionCombobox.Size = new Size(121, 23);
-            resolutionCombobox.TabIndex = 2;
-            resolutionCombobox.Text = "Resolution";
             // 
             // tabControl
             // 
@@ -123,9 +117,8 @@
             // 
             // resolutionHotkeyTab
             // 
-            resolutionHotkeyTab.Controls.Add(resolutionHotkeyApplyButton);
-            resolutionHotkeyTab.Controls.Add(frequencyCombobox);
-            resolutionHotkeyTab.Controls.Add(resolutionCombobox);
+            resolutionHotkeyTab.Controls.Add(ResolutionHotkeysPanel);
+            resolutionHotkeyTab.Controls.Add(bottomButtonsPanel);
             resolutionHotkeyTab.Location = new Point(4, 24);
             resolutionHotkeyTab.Name = "resolutionHotkeyTab";
             resolutionHotkeyTab.Padding = new Padding(3);
@@ -134,25 +127,49 @@
             resolutionHotkeyTab.Text = "Resolution Hotkeys";
             resolutionHotkeyTab.UseVisualStyleBackColor = true;
             // 
+            // ResolutionHotkeysPanel
+            // 
+            ResolutionHotkeysPanel.Dock = DockStyle.Fill;
+            ResolutionHotkeysPanel.Location = new Point(3, 3);
+            ResolutionHotkeysPanel.Name = "ResolutionHotkeysPanel";
+            ResolutionHotkeysPanel.Size = new Size(716, 450);
+            ResolutionHotkeysPanel.TabIndex = 12;
+            ResolutionHotkeysPanel.AutoScroll = true;
+            ResolutionHotkeysPanel.WrapContents = false;
+            ResolutionHotkeysPanel.FlowDirection = FlowDirection.TopDown;
+            // 
+            // bottomButtonsPanel
+            // 
+            bottomButtonsPanel.AutoSize = true;
+            bottomButtonsPanel.Controls.Add(addHotkeyResolutionForm);
+            bottomButtonsPanel.Controls.Add(resolutionHotkeyApplyButton);
+            bottomButtonsPanel.Dock = DockStyle.Bottom;
+            bottomButtonsPanel.Location = new Point(3, 453);
+            bottomButtonsPanel.Name = "bottomButtonsPanel";
+            bottomButtonsPanel.Size = new Size(716, 29);
+            bottomButtonsPanel.TabIndex = 11;
+            // 
+            // addHotkeyResolutionForm
+            // 
+            addHotkeyResolutionForm.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            addHotkeyResolutionForm.Location = new Point(3, 3);
+            addHotkeyResolutionForm.Name = "addHotkeyResolutionForm";
+            addHotkeyResolutionForm.Size = new Size(72, 23);
+            addHotkeyResolutionForm.TabIndex = 9;
+            addHotkeyResolutionForm.Text = "+";
+            addHotkeyResolutionForm.UseVisualStyleBackColor = true;
+            addHotkeyResolutionForm.Click += AddHotkeyButton_Click;
+            // 
             // resolutionHotkeyApplyButton
             // 
             resolutionHotkeyApplyButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            resolutionHotkeyApplyButton.Location = new Point(639, 454);
+            resolutionHotkeyApplyButton.Location = new Point(81, 3);
             resolutionHotkeyApplyButton.Name = "resolutionHotkeyApplyButton";
             resolutionHotkeyApplyButton.Size = new Size(75, 23);
             resolutionHotkeyApplyButton.TabIndex = 4;
             resolutionHotkeyApplyButton.Text = "Apply";
             resolutionHotkeyApplyButton.UseVisualStyleBackColor = true;
-            resolutionHotkeyApplyButton.Click += ResolutionHotkey_Apply_Button_Click;
-            // 
-            // frequencyCombobox
-            // 
-            frequencyCombobox.FormattingEnabled = true;
-            frequencyCombobox.Location = new Point(133, 6);
-            frequencyCombobox.Name = "frequencyCombobox";
-            frequencyCombobox.Size = new Size(121, 23);
-            frequencyCombobox.TabIndex = 3;
-            frequencyCombobox.Text = "Frequency";
+            resolutionHotkeyApplyButton.Click += resolutionHotkey_Apply_Button_Click;
             // 
             // Settings
             // 
@@ -166,19 +183,22 @@
             generalSettingsTab.ResumeLayout(false);
             generalSettingsTab.PerformLayout();
             resolutionHotkeyTab.ResumeLayout(false);
+            resolutionHotkeyTab.PerformLayout();
+            bottomButtonsPanel.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
-        private ComboBox resolutionCombobox;
         private TabControl tabControl;
         private TabPage generalSettingsTab;
-        private TabPage resolutionHotkeyTab;
         private Button generalSettingsApplyButton;
         private CheckBox windowsDarkThemeCheckbox;
         private CheckBox disableMouseAccelCheckbox;
         private Button generalSettingsRecommendedButton;
-        private ComboBox frequencyCombobox;
+        private TabPage resolutionHotkeyTab;
+        private Button addHotkeyResolutionForm;
         private Button resolutionHotkeyApplyButton;
+        private FlowLayoutPanel bottomButtonsPanel;
+        private FlowLayoutPanel ResolutionHotkeysPanel;
     }
 }
