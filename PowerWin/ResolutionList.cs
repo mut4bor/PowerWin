@@ -96,31 +96,26 @@ namespace PowerWin
 
         public static (int Width, int Height, bool Success) ResolutionToKey(string resolution)
         {
-            // Проверяем, что строка не пуста и содержит символ 'x'
             if (string.IsNullOrWhiteSpace(resolution) || !resolution.Contains('x'))
             {
-                return (0, 0, false); // Возвращаем 0,0 и false в случае некорректного формата
+                return (0, 0, false);
             }
 
             var dimensions = resolution.Split('x');
 
-            // Проверяем, что строка содержит ровно два элемента после разделения
             if (dimensions.Length != 2)
             {
-                return (0, 0, false); // Если элементов больше или меньше двух, возвращаем ошибку
+                return (0, 0, false);
             }
 
-            // Преобразуем каждую часть в число с помощью TryParse
             bool isWidthValid = int.TryParse(dimensions[0], out int width);
             bool isHeightValid = int.TryParse(dimensions[1], out int height);
 
-            // Если оба значения корректные, возвращаем их как кортеж с успешным результатом
             if (isWidthValid && isHeightValid)
             {
                 return (width, height, true);
             }
 
-            // Если хотя бы одно значение некорректно, возвращаем 0,0 и false
             return (0, 0, false);
         }
 

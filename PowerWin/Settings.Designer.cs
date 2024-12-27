@@ -169,7 +169,7 @@ namespace PowerWin
             resolutionHotkeyApplyButton.TabIndex = 4;
             resolutionHotkeyApplyButton.Text = "Apply";
             resolutionHotkeyApplyButton.UseVisualStyleBackColor = true;
-            resolutionHotkeyApplyButton.Click += resolutionHotkey_Apply_Button_Click;
+            resolutionHotkeyApplyButton.Click += ResolutionHotkey_Apply_Button_Click;
             // 
             // Settings
             // 

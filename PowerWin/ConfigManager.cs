@@ -2,9 +2,10 @@ using System.Text.Json;
 
 public class ResolutionHotkey
 {
-    public required string Resolution { get; set; }
-    public required string RefreshRate { get; set; }
-    public required string Hotkey { get; set; }
+    public required int Width { get; set; }
+    public required int Height { get; set; }
+    public required int RefreshRate { get; set; }
+    public required string[] Hotkey { get; set; }
 }
 
 public class Config

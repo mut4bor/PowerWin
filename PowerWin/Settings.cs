@@ -3,8 +3,7 @@
     public partial class Settings : Form
     {
         private int groupBoxCounter = 1;
-        private Config _config;
-        private HotkeyManager _hotkeyManager;
+        private readonly Config _config;
 
         public Settings()
         {
@@ -15,31 +14,21 @@
 
         private void InitializeHotkeys()
         {
-            _hotkeyManager = new HotkeyManager();
+            var hotkeyManager = new HotkeyManager();
 
             foreach (var hotkey in _config.ResolutionHotkeys)
             {
-                AddResolutionHotkeyGroupBox(hotkey); // Это, скорее всего, добавляет элементы UI для отображения
-
-                // Регистрируем горячую клавишу с соответствующим действием
-                _hotkeyManager.RegisterHotkey(
+                AddResolutionHotkeyGroupBox(hotkey);
+                hotkeyManager.RegisterHotkey(
                     hotkey.Hotkey,
                     () =>
-                    {
-                        // Парсим разрешение и частоту обновления
-                        var resolutionParts = hotkey.Resolution.Split('x');
-                        int width = int.Parse(resolutionParts[0].Trim());
-                        int height = int.Parse(resolutionParts[1].Trim());
-                        int refreshRate = int.Parse(hotkey.RefreshRate);
-
-                        // Изменяем разрешение экрана
-                        ChangeResolution.SetResolution(width, height, refreshRate);
-                    }
+                        ChangeResolution.SetResolution(
+                            hotkey.Width,
+                            hotkey.Height,
+                            hotkey.RefreshRate
+                        )
                 );
             }
-
-            // Запускаем прослушивание горячих клавиш
-            _hotkeyManager.Start();
         }
 
         private void GeneralSettings_Apply_Button_Click(object sender, EventArgs e)
@@ -74,14 +63,14 @@
             }
         }
 
-        private void AddResolutionHotkeyGroupBox(ResolutionHotkey hotkey = null)
+        private void AddResolutionHotkeyGroupBox(ResolutionHotkey? hotkey = null)
         {
             int padding = 10;
             int spacingBetweenElements = 10;
 
-            GroupBox newGroupBox = new GroupBox { Text = $"Resolution {groupBoxCounter++}" };
+            var newGroupBox = new GroupBox { Text = $"Resolution {groupBoxCounter++}" };
 
-            ComboBox resolutionComboBox = new ComboBox
+            var resolutionComboBox = new ComboBox
             {
                 Font = new Font("Arial", 14F),
                 FormattingEnabled = true,
@@ -89,20 +78,26 @@
                 Location = new Point(padding, padding + 7),
                 Name = $"resolutionComboBox_{groupBoxCounter}",
                 Size = new Size(210, 30),
-                Text = hotkey?.Resolution ?? "Resolution",
+                Text =
+                    (hotkey != null && hotkey.Width > 0 && hotkey.Height > 0)
+                        ? $"{hotkey.Width} x {hotkey.Height}"
+                        : "Resolution",
             };
 
-            ComboBox refreshRateComboBox = new ComboBox
+            var refreshRateComboBox = new ComboBox
             {
                 Font = new Font("Arial", 8F),
                 FormattingEnabled = true,
                 Location = new Point(padding, resolutionComboBox.Bottom + spacingBetweenElements),
                 Name = $"refreshRateComboBox_{groupBoxCounter}",
                 Size = new Size(100, 22),
-                Text = hotkey?.RefreshRate ?? "Refresh Rate",
+                Text =
+                    (hotkey != null && hotkey.RefreshRate > 0)
+                        ? $"{hotkey?.RefreshRate}"
+                        : "Refresh Rate",
             };
 
-            TextBox hotkeyTextBox = new TextBox
+            var hotkeyTextBox = new TextBox
             {
                 Location = new Point(
                     refreshRateComboBox.Right + spacingBetweenElements,
@@ -110,42 +105,43 @@
                 ),
                 Name = $"hotkeyTextBox_{groupBoxCounter}",
                 Size = new Size(100, 23),
-                Text = hotkey?.Hotkey ?? "Hotkey",
+                Text = hotkey?.Hotkey != null ? string.Join(" + ", hotkey.Hotkey) : "Hotkey",
             };
 
             hotkeyTextBox.KeyDown += (sender, e) =>
             {
                 if (sender is TextBox textBox)
                 {
-                    string key = "";
+                    var keys = new List<string>();
 
                     if (e.Control)
-                        key += "Ctrl + ";
+                        keys.Add("Ctrl");
                     if (e.Alt)
-                        key += "Alt + ";
+                        keys.Add("Alt");
                     if (e.Shift)
-                        key += "Shift + ";
+                        keys.Add("Shift");
 
-                    key += e.KeyCode;
+                    keys.Add(e.KeyCode.ToString());
 
-                    textBox.Text = key;
+                    textBox.Text = string.Join(" + ", keys);
                     e.SuppressKeyPress = true;
 
                     if (hotkey != null)
-                        hotkey.Hotkey = key;
+                    {
+                        hotkey.Hotkey = [.. keys];
+                    }
                 }
             };
 
             ResolutionList.SetDisplayResolutions(resolutionComboBox, refreshRateComboBox);
 
-            // Кнопка удаления
-            Button deleteButton = new Button
+            var deleteButton = new Button
             {
                 Text = "Delete",
                 Location = new Point(
                     padding,
                     hotkeyTextBox.Top + hotkeyTextBox.Height + spacingBetweenElements
-                ), // позиция в правом нижнем углу
+                ),
                 Size = new Size(60, 25),
             };
 
@@ -157,11 +153,11 @@
             newGroupBox.Controls.Add(resolutionComboBox);
             newGroupBox.Controls.Add(refreshRateComboBox);
             newGroupBox.Controls.Add(hotkeyTextBox);
-            newGroupBox.Controls.Add(deleteButton); // добавление кнопки в GroupBox
+            newGroupBox.Controls.Add(deleteButton);
 
             int groupBoxWidth = Math.Max(resolutionComboBox.Right, hotkeyTextBox.Right) + padding;
             int groupBoxHeight =
-                hotkeyTextBox.Bottom + deleteButton.Height + padding + spacingBetweenElements; // учёт кнопки удаления
+                hotkeyTextBox.Bottom + deleteButton.Height + padding + spacingBetweenElements;
 
             newGroupBox.Size = new Size(groupBoxWidth, groupBoxHeight);
 
@@ -173,9 +169,8 @@
             AddResolutionHotkeyGroupBox();
         }
 
-        private void resolutionHotkey_Apply_Button_Click(object sender, EventArgs e)
+        private void ResolutionHotkey_Apply_Button_Click(object sender, EventArgs e)
         {
-            // Сохранение текущих настроек хоткеев
             _config.ResolutionHotkeys.Clear();
             foreach (Control control in ResolutionHotkeysPanel.Controls)
             {
@@ -197,14 +192,25 @@
                         && hotkeyTextBox != null
                     )
                     {
-                        _config.ResolutionHotkeys.Add(
-                            new ResolutionHotkey
-                            {
-                                Resolution = resolutionComboBox.Text,
-                                RefreshRate = refreshRateComboBox.Text,
-                                Hotkey = hotkeyTextBox.Text,
-                            }
+                        (int width, int height, bool success) = ResolutionList.ResolutionToKey(
+                            resolutionComboBox.Text
                         );
+
+                        if (success && int.TryParse(refreshRateComboBox.Text, out int refreshRate))
+                        {
+                            _config.ResolutionHotkeys.Add(
+                                new ResolutionHotkey
+                                {
+                                    Width = width,
+                                    Height = height,
+                                    RefreshRate = refreshRate,
+                                    Hotkey = hotkeyTextBox.Text.Split(
+                                        [" + "],
+                                        StringSplitOptions.RemoveEmptyEntries
+                                    ),
+                                }
+                            );
+                        }
                     }
                 }
             }

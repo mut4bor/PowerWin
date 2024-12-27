@@ -10,8 +10,4 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Toolbelt.Blazor.HotKeys2" Version="6.0.0" />
-  </ItemGroup>
-
 </Project>

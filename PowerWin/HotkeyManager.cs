@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
+﻿using System.Runtime.InteropServices;
 
 namespace PowerWin
 {
     internal class HotkeyManager
     {
-        private Dictionary<string, Action> _hotkeys;
-
-        // WinAPI константы
-        private const int MOD_CTRL = 0x0002;
+        private const int MOD_CONTROL = 0x0002;
         private const int MOD_ALT = 0x0001;
         private const int MOD_SHIFT = 0x0004;
-        private const int MOD_WIN = 0x0008;
 
         [DllImport("user32.dll")]
         public static extern int RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
@@ -22,79 +14,80 @@ namespace PowerWin
         [DllImport("user32.dll")]
         public static extern int UnregisterHotKey(IntPtr hWnd, int id);
 
+        private int hotkeyIdCounter = 1;
+        private readonly HashSet<int> registeredHotkeys = [];
+
         public HotkeyManager()
         {
-            _hotkeys = new Dictionary<string, Action>();
+            Application.AddMessageFilter(new HotkeyMessageFilter());
         }
 
-        // Регистрация горячих клавиш
-        public void RegisterHotkey(string hotkey, Action action)
-        {
-            _hotkeys[hotkey] = action;
-        }
-
-        // Разбор строки горячей клавиши и преобразование в коды
-        private (uint modifiers, uint keyCode) ParseHotkeyString(string hotkey)
+        public void RegisterHotkey(string[] hotkeyCombinations, Action callback)
         {
             uint modifiers = 0;
-            uint keyCode = 0;
+            uint key = 0;
 
-            // Разбираем строку на компоненты (например, "Ctrl + Alt + D5")
-            var parts = hotkey.Split(new[] { " + " }, StringSplitOptions.None);
-
-            foreach (var part in parts)
+            foreach (var keyPart in hotkeyCombinations)
             {
-                if (part.Contains("Ctrl"))
+                switch (keyPart.Trim().ToUpper())
                 {
-                    modifiers |= MOD_CTRL;
-                }
-                else if (part.Contains("Alt"))
-                {
-                    modifiers |= MOD_ALT;
-                }
-                else if (part.Contains("Shift"))
-                {
-                    modifiers |= MOD_SHIFT;
-                }
-                else if (part.Contains("Win"))
-                {
-                    modifiers |= MOD_WIN;
-                }
-                else
-                {
-                    keyCode = ConvertKeyToKeyCode(part);
+                    case "CTRL":
+                        modifiers |= MOD_CONTROL;
+                        break;
+                    case "ALT":
+                        modifiers |= MOD_ALT;
+                        break;
+                    case "SHIFT":
+                        modifiers |= MOD_SHIFT;
+                        break;
+                    default:
+                        key = Convert.ToUInt32(Enum.Parse(typeof(Keys), keyPart.Trim().ToUpper()));
+                        break;
                 }
             }
 
-            return (modifiers, keyCode);
-        }
-
-        // Преобразование символа клавиши в код (например, D5 -> VK_D5)
-        private uint ConvertKeyToKeyCode(string key)
-        {
-            switch (key.Trim())
+            if (RegisterHotKey(IntPtr.Zero, hotkeyIdCounter, modifiers, key) != 0)
             {
-                case "D5":
-                    return (uint)Keys.D5;
-                case "D6":
-                    return (uint)Keys.D6;
-                // Добавьте другие клавиши по мере необходимости
-                default:
-                    throw new ArgumentException($"Unsupported key: {key}");
+                registeredHotkeys.Add(hotkeyIdCounter);
+                HotkeyMessageFilter.AddHotkeyCallback(hotkeyIdCounter++, callback);
+            }
+            else
+            {
+                throw new InvalidOperationException("Failed to register hotkey.");
             }
         }
 
-        // Метод для запуска прослушивания горячих клавиш
-        public void Start()
+        public void UnregisterAllHotkeys()
         {
-            foreach (var hotkey in _hotkeys)
+            foreach (var id in registeredHotkeys)
             {
-                var (modifiers, keyCode) = ParseHotkeyString(hotkey.Key);
-                RegisterHotKey(IntPtr.Zero, hotkey.Key.GetHashCode(), modifiers, keyCode);
+                UnregisterHotKey(IntPtr.Zero, id);
+            }
+            registeredHotkeys.Clear();
+        }
+    }
+
+    internal class HotkeyMessageFilter : IMessageFilter
+    {
+        private static readonly Dictionary<int, Action> hotkeyCallbacks = [];
+
+        public static void AddHotkeyCallback(int hotkeyId, Action callback)
+        {
+            hotkeyCallbacks[hotkeyId] = callback;
+        }
+
+        public bool PreFilterMessage(ref Message m)
+        {
+            if (m.Msg == 0x0312) // WM_HOTKEY
+            {
+                int hotkeyId = m.WParam.ToInt32();
+                if (hotkeyCallbacks.TryGetValue(hotkeyId, out var callback))
+                {
+                    callback.Invoke();
+                }
             }
 
-            // Запуск цикла прослушивания горячих клавиш
-            // ...
+            return false;
         }
     }
 }
