@@ -41,7 +41,14 @@ namespace PowerWin
                         modifiers |= MOD_SHIFT;
                         break;
                     default:
-                        key = Convert.ToUInt32(Enum.Parse(typeof(Keys), keyPart.Trim().ToUpper()));
+                        if (Enum.TryParse(keyPart.Trim().ToUpper(), out Keys parsedKey))
+                        {
+                            key = Convert.ToUInt32(parsedKey);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error parsing resolution hotkeys");
+                        }
                         break;
                 }
             }

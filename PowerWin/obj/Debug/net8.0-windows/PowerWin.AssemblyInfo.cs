@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PowerWin")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6dad7804392edd8a25c32ccf918e16c9c1725126")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+346ce7309d485dd7815f11a461e23c4692792d56")]
 [assembly: System.Reflection.AssemblyProductAttribute("PowerWin")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PowerWin")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

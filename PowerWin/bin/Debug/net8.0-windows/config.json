@@ -1,14 +1,24 @@
 {
   "ResolutionHotkeys": [
     {
-      "Resolution": "1920 x 1440",
-      "RefreshRate": "180",
-      "Hotkey": "Ctrl \u002B Alt \u002B D5"
+      "Width": 2560,
+      "Height": 1440,
+      "RefreshRate": 180,
+      "Hotkey": [
+        "Ctrl",
+        "Alt",
+        "Q"
+      ]
     },
     {
-      "Resolution": "1920 x 1440",
-      "RefreshRate": "180",
-      "Hotkey": "Ctrl \u002B Alt \u002B D6"
+      "Width": 1920,
+      "Height": 1440,
+      "RefreshRate": 180,
+      "Hotkey": [
+        "Ctrl",
+        "Alt",
+        "W"
+      ]
     }
   ]
 }

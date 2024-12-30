@@ -4,12 +4,68 @@
     {
         private int groupBoxCounter = 1;
         private readonly Config _config;
+        private NotifyIcon trayIcon;
+        private ContextMenuStrip trayMenu;
 
         public Settings()
         {
             InitializeComponent();
             _config = ConfigManager.LoadConfig();
             InitializeHotkeys();
+            InitializeTray();
+        }
+
+        private void InitializeTray()
+        {
+            // Создание контекстного меню
+            trayMenu = new ContextMenuStrip();
+            trayMenu.Items.Add("Close", null, OnTrayClose);
+
+            string iconPath = Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory,
+                @"..\..\..\favicon.ico"
+            );
+
+            trayIcon = new NotifyIcon
+            {
+                Text = "PowerWin",
+                Icon = new Icon(iconPath),
+                ContextMenuStrip = trayMenu,
+                Visible = true,
+            };
+
+            trayIcon.DoubleClick += OnTrayDoubleClick;
+        }
+
+        private void OnTrayClose(object sender, EventArgs e)
+        {
+            trayIcon.Visible = false;
+            Application.Exit();
+        }
+
+        private void OnTrayDoubleClick(object sender, EventArgs e)
+        {
+            Show();
+            WindowState = FormWindowState.Normal;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+                Hide();
+            }
+            base.OnFormClosing(e);
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            if (WindowState == FormWindowState.Minimized)
+            {
+                Hide();
+            }
         }
 
         private void InitializeHotkeys()
@@ -19,6 +75,7 @@
             foreach (var hotkey in _config.ResolutionHotkeys)
             {
                 AddResolutionHotkeyGroupBox(hotkey);
+
                 hotkeyManager.RegisterHotkey(
                     hotkey.Hotkey,
                     () =>
